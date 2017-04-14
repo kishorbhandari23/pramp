@@ -1,0 +1,45 @@
+#include "stdafx.h"
+#include <iostream>
+#include <unordered_map>
+//#include <sstream>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+vector<pair<string, int>>SortbyOccurence(const string &doc);
+
+int main() {
+	vector<pair<string, int>> retvec = SortbyOccurence("practice makes perfect. get perfect by practice. just practice!");
+	vector<pair<string, int>>::iterator iter;
+
+	for (iter = retvec.begin(); iter != retvec.end(); iter++)
+		cout << "(" << iter->first << ", " << iter->second << ")\n";
+}
+
+bool compare(pair<string, int> const &pair1, pair<string, int>const & pair2)
+{
+	return (pair1.second > pair2.second);
+}
+
+vector<pair<string, int>>SortbyOccurence(const string &doc)
+{
+//	stringstream ss(doc);
+	int start = 0; 
+	string word;
+	unordered_map<string, int> umap;
+	for (int i = 0; i < doc.length(); i++)
+	{
+		if (tolower(doc[i]) < 'a' || tolower(doc[i]) > 'z')
+			continue;
+		start = i;
+		while (tolower(doc[i]) >= 'a' && tolower(doc[i]) <= 'z') i++;
+		word = doc.substr(start, i-start);
+		umap[word]++;
+
+	}
+	//while (ss >> word)
+	//	umap[word]++;
+	vector<pair<string, int>> retvec (umap.begin(), umap.end());
+	sort(retvec.begin(), retvec.end(), compare);
+	return retvec;
+}
